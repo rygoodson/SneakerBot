@@ -2,7 +2,7 @@ package main.java.sneakerbot.atc;
 
 public class YeezySupply implements Runnable {
 	
-	YeezySupply(String proxy) {
+	public YeezySupply(String proxy) {
 		
 	}
 

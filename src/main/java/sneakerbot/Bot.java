@@ -1,5 +1,6 @@
 package main.java.sneakerbot;
 
+import main.java.sneakerbot.atc.Adidas;
 import main.java.sneakerbot.thread.ThreadPool;
 
 public class Bot {
@@ -10,6 +11,8 @@ public class Bot {
 		int count = 1; // proxy count (default=1)
 		
 		pool = new ThreadPool(count);
+		
+		pool.run(new Adidas(null));
 	}
 	
 	static {
