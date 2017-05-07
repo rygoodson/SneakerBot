@@ -11,8 +11,10 @@ public class Bot {
 		int count = 1; // proxy count (default=1)
 		
 		pool = new ThreadPool(count);
+		pool.run(new Adidas("1"));		
+		pool.flush();
 		
-		pool.run(new Adidas(null));
+	
 	}
 	
 	static {
