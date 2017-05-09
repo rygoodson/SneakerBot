@@ -52,11 +52,25 @@ public class Adidas implements Runnable {
 	
 	/*@Override
 	public void run() {
-		driver.get("http://tools.yzy.io/hmac.html");
+		
+		//Start time
+		long start = System.currentTimeMillis();
+
+
+		try {
+			driver.get("http://tools.yzy.io/hmac.html");
+		} catch (Exception e) {
+			driver.close();
+		}
+		
+		//end time
+		long end = System.currentTimeMillis();
+		
+		//driver.get("http://tools.yzy.io/hmac.html");
 		
 		//TODO: Get to splash page.
 		
-		System.out.println(proxy + " -> waiting at splash page!");	
+		System.out.println(proxy + " -> waiting at splash page! Response time: " + (end - start));	
 		boolean found_hmac = false;
 		while(!found_hmac) {
 				try {
