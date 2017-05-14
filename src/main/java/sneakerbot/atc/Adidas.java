@@ -3,16 +3,19 @@ package main.java.sneakerbot.atc;
 import java.util.Date;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class Adidas implements Runnable {
 	
-	public Adidas(String proxy) {
+	public Adidas(String proxy, boolean manual) {
 		super();
-		System.out.println("ran?");
 		driver = new HtmlUnitDriver();
 		this.proxy = proxy;
+		this.manual = manual;
+		carted = false;
 	}
 
 	@Override
@@ -47,8 +50,29 @@ public class Adidas implements Runnable {
 			
 		System.out.println("[Success] -> SiteKey: " + siteKey + " Client ID: " + clientId + " HMAC: " + hmac);
 		
-		//TODO: Generate cart url? and checkout.
+		if(manual) {
+			WebDriver checkout = new FirefoxDriver();
+			
+			for (Cookie cookie : driver.manage().getCookies())
+				checkout.manage().addCookie(cookie);
+			
+			checkout.get(driver.getCurrentUrl());
+		} 
+		else 
+			while(!carted) 
+				atc();
+				
 	} 
+	
+	public void atc() {
+		try {
+			
+			// auto checkout
+			
+		} catch (Exception e) {
+			System.out.println("Exception: " + e.toString());
+		}
+	}
 	
 	/*@Override
 	public void run() {
@@ -101,5 +125,7 @@ public class Adidas implements Runnable {
 	Date hmacExpiration;
 	String siteKey;
 	String clientId;
+	boolean carted;
+	boolean manual;
 
 }
