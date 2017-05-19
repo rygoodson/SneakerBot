@@ -8,16 +8,19 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+
 public class Adidas implements Runnable {
 	
 	public Adidas(String proxy, boolean manual) {
 		super();
-		driver = new HtmlUnitDriver();
+		driver = new HtmlUnitDriver(new BrowserVersion("Firefox", "5.0 (Windows)", null/*USER-AGENT*/, 28));
 		this.proxy = proxy;
 		this.manual = manual;
 		carted = false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void run() {
 		driver.get("http://www.adidas.com/yeezy");
@@ -47,8 +50,9 @@ public class Adidas implements Runnable {
 		
 		if(driver.findElements(By.id("flashproductform")).size() > 0)
 			clientId = driver.findElement(By.id("flashproductform")).getAttribute("action").split("clientId=")[1];
-			
-		System.out.println("[Success] -> SiteKey: " + siteKey + " Client ID: " + clientId + " HMAC: " + hmac);
+		
+		Date timeLeft = new Date(hmacExpiration.getTime() - System.currentTimeMillis());
+		System.out.println("[Success] -> SiteKey: " + siteKey + " Client ID: " + clientId + " HMAC: " + hmac + " Time Left: " + timeLeft.getMinutes() + "m" + timeLeft.getSeconds() + "s");
 		
 		if(manual) {
 			WebDriver checkout = new FirefoxDriver();
@@ -59,7 +63,7 @@ public class Adidas implements Runnable {
 			checkout.get(driver.getCurrentUrl());
 		} 
 		else 
-			while(!carted) 
+			while(!carted && hmacExpiration.getTime() > System.currentTimeMillis()) 
 				atc();
 				
 	} 
