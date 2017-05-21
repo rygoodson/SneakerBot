@@ -1,22 +1,29 @@
 package main.java.sneakerbot;
 
-import java.util.Date;
+import java.util.ArrayList;
 
 import main.java.sneakerbot.atc.Adidas;
+import main.java.sneakerbot.loaders.Proxy;
+import main.java.sneakerbot.loaders.Proxy.ProxyObject;
 import main.java.sneakerbot.thread.ThreadPool;
 
 public class Bot {
 	
 	static ThreadPool pool;
+	static ArrayList<ProxyObject> proxies;
+	
+	public static void init() {
+		proxies = Proxy.load("proxies.txt");
+	}
 
-	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
-		int count = 1; // proxy count (default=1)
+		init();
 		
-		pool = new ThreadPool(count);
-		pool.run(new Adidas("1", false));		
+		pool = new ThreadPool(proxies.size());
+		proxies.stream().forEach(p -> {
+			pool.run(new Adidas(p, false));	
+		});	
 		pool.flush();
-		
 		
 	
 	}

@@ -10,9 +10,11 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 
+import main.java.sneakerbot.loaders.Proxy.ProxyObject;
+
 public class Adidas implements Runnable {
 	
-	public Adidas(String proxy, boolean manual) {
+	public Adidas(ProxyObject proxy, boolean manual) {
 		super();
 		driver = new HtmlUnitDriver(new BrowserVersion("Firefox", "5.0 (Windows)", null/*USER-AGENT*/, 28));
 		this.proxy = proxy;
@@ -124,7 +126,7 @@ public class Adidas implements Runnable {
 	} */
 	
 	WebDriver driver;
-	String proxy;
+	ProxyObject proxy;
 	String hmac;
 	Date hmacExpiration;
 	String siteKey;
