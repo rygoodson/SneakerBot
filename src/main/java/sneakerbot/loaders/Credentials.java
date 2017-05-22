@@ -43,7 +43,7 @@ public class Credentials {
 	
 	public static void create(String name) {
 		CredentialObject creds = new CredentialObject("", new CreditCard("", "", "", "", ""),
-				new Billing("", "", "", "", "", "", ""), new Shipping("", "", "", "", "", ""));
+				new Paypal("", ""), new Billing("", "", "", "", "", "", ""), new Shipping("", "", "", "", "", ""));
 		Map<String, CredentialObject> map = new HashMap<String, CredentialObject>();
 		map.put("CC 1", creds);
 		map.put("CC 2", creds);
@@ -56,10 +56,11 @@ public class Credentials {
 	
 	public static class CredentialObject {
 		
-		public CredentialObject(String email, CreditCard card, Billing billing, Shipping shipping) {
+		public CredentialObject(String email, CreditCard card, Paypal paypal, Billing billing, Shipping shipping) {
 			super();
 			this.email = email;
 			this.card = card;
+			this.paypal = paypal;
 			this.billing = billing;
 			this.shipping = shipping;
 		}
@@ -72,6 +73,10 @@ public class Credentials {
 			return card;
 		}
 		
+		public Paypal getPaypal() {
+			return paypal;
+		}
+		
 		public Billing getBilling() {
 			return billing;
 		}
@@ -82,12 +87,13 @@ public class Credentials {
 	
 		@Override
 		public String toString() {
-			return "CredentialObject [email=" + email + ", card=" + card + ", billing=" + billing + ", shipping="
+			return "CredentialObject [email=" + email + ", card=" + card + ", paypal=" + paypal + ", billing=" + billing + ", shipping="
 					+ shipping + "]";
 		}
 
 		private String email;
 		private CreditCard card;
+		private Paypal paypal;
 		private Billing billing;
 		private Shipping shipping;
 		
@@ -244,6 +250,31 @@ public class Credentials {
 		private String month;
 		private String year;
 		private String code;
+	}
+	
+	public static class Paypal {
+		
+		public Paypal(String username, String password) {
+			super();
+			this.username = username;
+			this.password = password;
+		}
+		
+		public String getUsername() {
+			return username;
+		}
+		
+		public String getPassword() {
+			return password;
+		}
+
+		@Override
+		public String toString() {
+			return "Paypal [username=" + username + ", password=" + password + "]";
+		}
+
+		private String username;
+		private String password;
 	}
 
 }
