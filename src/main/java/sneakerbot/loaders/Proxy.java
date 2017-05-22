@@ -83,6 +83,12 @@ public class Proxy {
 			this.password = password;
 		}
 
+		@Override
+		public String toString() {
+			return "ProxyObject [address=" + address + ", port=" + port + ", username=" + username + ", password="
+					+ password + "]";
+		}
+
 		private String address;
 		private int port;
 		private String username;
