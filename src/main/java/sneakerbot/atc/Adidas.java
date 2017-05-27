@@ -4,32 +4,57 @@ import java.util.Date;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-
+import main.java.sneakerbot.loaders.Credentials.CredentialObject;
 import main.java.sneakerbot.loaders.Proxy.ProxyObject;
 
 public class Adidas implements Runnable {
 	
-	public Adidas(ProxyObject proxy, boolean manual) {
+	public Adidas(ProxyObject proxy, CredentialObject credentials, boolean splash, boolean manual) {
 		super();
-		driver = new HtmlUnitDriver(new BrowserVersion("Firefox", "5.0 (Windows)", null/*USER-AGENT*/, 28));
+	    DesiredCapabilities capability = new DesiredCapabilities();
+	    
+	    if(proxy != null) {
+	    	String server = proxy.getAddress() + ":" + proxy.getPort();
+	        capability.setCapability(CapabilityType.PROXY, new Proxy().setHttpProxy(server).setFtpProxy(server).setSslProxy(server));
+	    }
+	    
+	    capability.setCapability("phantomjs.page.settings.userAgent", ""/*USER-AGENT*/);
+        
+		driver = new PhantomJSDriver(capability);
 		this.proxy = proxy;
+		this.splash = splash;
 		this.manual = manual;
 		carted = false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void run() {
+		if(splash)
+			splash();
+		else
+			product();
+				
+	} 
+	
+	public void product() {
+		
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void splash() {
 		driver.get("http://www.adidas.com/yeezy");
 		
 		//TODO: Get to splash page.
 		
-		System.out.println(proxy + " -> waiting at splash page!");		
+		System.out.println(proxy + " -> waiting at splash page!");	
+		
 		while(driver.findElement(By.className("sk-fading-circle")).isDisplayed()) {
 				try {
 					Thread.sleep(5000L);
@@ -67,8 +92,7 @@ public class Adidas implements Runnable {
 		else 
 			while(!carted && hmacExpiration.getTime() > System.currentTimeMillis()) 
 				atc();
-				
-	} 
+	}
 	
 	public void atc() {
 		try {
@@ -80,57 +104,14 @@ public class Adidas implements Runnable {
 		}
 	}
 	
-	/*@Override
-	public void run() {
-		
-		//Start time
-		long start = System.currentTimeMillis();
-
-
-		try {
-			driver.get("http://tools.yzy.io/hmac.html");
-		} catch (Exception e) {
-			driver.close();
-		}
-		
-		//end time
-		long end = System.currentTimeMillis();
-		
-		//driver.get("http://tools.yzy.io/hmac.html");
-		
-		//TODO: Get to splash page.
-		
-		System.out.println(proxy + " -> waiting at splash page! Response time: " + (end - start));	
-		boolean found_hmac = false;
-		while(!found_hmac) {
-				try {
-					driver.manage().getCookies().stream().forEach(c -> {
-						System.out.println("Name: " + c.getName() + " Value: " + c.getValue());
-						if(c.getValue().contains("hmac")) {
-							hmac = c.getValue();
-							hmacExpiration = c.getExpiry();
-						}
-					});
-					
-					if(hmac != null)
-						found_hmac = true;
-					
-					Thread.sleep(5000L);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		}
-		System.out.println(proxy + " -> passed splash page!");				
-		
-	} */
-	
 	WebDriver driver;
 	ProxyObject proxy;
-	String hmac;
+	CredentialObject credentials;
 	Date hmacExpiration;
+	String hmac;
 	String siteKey;
 	String clientId;
+	boolean splash;
 	boolean carted;
 	boolean manual;
 
