@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import main.java.sneakerbot.atc.Adidas;
+import main.java.sneakerbot.loaders.Config;
+import main.java.sneakerbot.loaders.Config.ConfigObject;
 import main.java.sneakerbot.loaders.Credentials;
 import main.java.sneakerbot.loaders.Credentials.CredentialObject;
 import main.java.sneakerbot.loaders.Proxy;
@@ -15,17 +17,18 @@ public class Bot {
 	static ThreadPool pool;
 	static ArrayList<ProxyObject> proxies;
 	static Map<String, CredentialObject> credentials;
+	static ConfigObject config;
 	
 	public static void init() {
 		proxies = Proxy.load("data/proxies.txt");
 		credentials = Credentials.load("data/credentials.json");
+		config = Config.load("data/config.json");
 	}
 
 	public static void main(String[] args) {
 		init();
 		
-		CredentialObject creds = credentials.get("CC 1");
-		System.out.println("Creds: " + creds.getEmail() + " creds2: " + creds.getCard());
+		System.out.println(config);
 		
 		/*pool = new ThreadPool(proxies.size());
 		proxies.stream().forEach(p -> {
