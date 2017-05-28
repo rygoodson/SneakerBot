@@ -143,6 +143,9 @@ public class ThreadPool {
 	 */
 	public void flush() {
 		flushing.set(true);
+		synchronized (taskQueue) {
+			taskQueue.notifyAll();
+		}
 		finish();
 		if (dead.get())
 			return;
@@ -234,7 +237,8 @@ public class ThreadPool {
 					taskQueue.addLast(r);
 				else
 					taskQueue.addFirst(r);
-				taskQueue.notifyAll();
+				//System.out.println("called");
+				//taskQueue.notifyAll();
 			}
 			inProcess.notifyAll();
 		}

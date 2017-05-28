@@ -1,6 +1,9 @@
 package main.java.sneakerbot.atc;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -8,6 +11,7 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -25,6 +29,10 @@ public class Adidas implements Runnable {
 	        capability.setCapability(CapabilityType.PROXY, new Proxy().setHttpProxy(server).setFtpProxy(server).setSslProxy(server));
 	    }
 	    
+	    capability.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, new  String[] { 
+	    		"--webdriver-loglevel=NONE" });
+	    Logger.getLogger(PhantomJSDriverService.class.getName()).setLevel(Level.OFF);
+	    
 	    capability.setCapability("phantomjs.page.settings.userAgent", ""/*USER-AGENT*/);
         
 		driver = new PhantomJSDriver(capability);
@@ -36,15 +44,24 @@ public class Adidas implements Runnable {
 
 	@Override
 	public void run() {
-		if(splash)
-			splash();
-		else
-			product();
-				
+		
+		while(!carted) {
+			
+			if(splash)
+				splash();
+			else
+				product();
+		}			
 	} 
 	
 	public void product() {
-		
+			System.out.println("product mode");
+			try {
+				Thread.sleep(2000L);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -54,14 +71,13 @@ public class Adidas implements Runnable {
 		//TODO: Get to splash page.
 		
 		System.out.println(proxy + " -> waiting at splash page!");	
-		
 		while(driver.findElement(By.className("sk-fading-circle")).isDisplayed()) {
-				try {
-					Thread.sleep(5000L);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			try {
+				Thread.sleep(5000L);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		System.out.println(proxy + " -> passed splash page!");
 		

@@ -1,11 +1,26 @@
-{
-  "link": "http://adidas.com/yeezy",
-  "splash": true,
-  "sizes": [
-    8.0,
-    8.5,
-    11.0,
-    12.5
-  ],
-  "tasks": 10
-}
+[
+  {
+    "link": "http://adidas.com/yeezy",
+    "splash": true,
+    "sizes": [
+      8.0,
+      8.5,
+      11.0,
+      12.5
+    ],
+    "payment": "CC 4",
+    "tasks": 5
+  },
+  {
+    "link": "http://adidas.com/yeezy",
+    "splash": false,
+    "sizes": [
+      6.0,
+      6.5,
+      9.0,
+      9.5
+    ],
+    "payment": "CC 2",
+    "tasks": 1
+  }
+]

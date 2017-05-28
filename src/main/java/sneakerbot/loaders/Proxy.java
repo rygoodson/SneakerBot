@@ -38,7 +38,7 @@ public class Proxy {
         	e.printStackTrace();
         	
         }
-        System.out.println(proxies.size() + " proxies loaded!");
+       // System.out.println(proxies.size() + " proxies loaded!");
         return proxies;
 	}
 	
