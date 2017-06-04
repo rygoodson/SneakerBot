@@ -67,13 +67,43 @@ public class Adidas implements Runnable {
 	} 
 	
 	public void product() {
-			print("product mode");
-			try {
-				Thread.sleep(2000L);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, 60L);
+			print("Loading webpage: " + url);
+			
+			driver.get(url);
+			
+		    wait.until(new Function<WebDriver, Boolean>() {
+		        public Boolean apply(WebDriver d) {
+		            //print("Current Window State       : "
+		             //   + String.valueOf(((JavascriptExecutor) d).executeScript("return document.readyState")));
+		            return String
+		                .valueOf(((JavascriptExecutor) d).executeScript("return document.readyState"))
+		                .equals("complete");
+		        }
+		    });
+		    
+		    String timer = driver.findElementById("pdp_timer").getAttribute("style");
+		    
+		    print(timer);
+		    
+		} catch (Exception e)
+		{
+			String name = e.getClass().getName();
+			print("[Exception] -> " + name);
+			carted = true;
+			
+			if(name.equals("org.openqa.selenium.TimeoutException"))
+				carted = false;
+			
+		} finally {
+			print(carted ? "Closing driver, and ending" : "Failed, Retrying...");
+			
+			if(carted) {
+				driver.quit();
+				Thread.currentThread().interrupt();
+			}
+		}
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -94,32 +124,35 @@ public class Adidas implements Runnable {
 		        }
 		    });
 		    
-		    //print(driver.getTitle());
-			
 			//TODO: Get to splash page.
-			
-			print(proxy != null ? ("[" + proxy.getPassword() + ":" + proxy.getPort() + "] -> ") : "" + "waiting at splash page!");	
-			
-			while(driver.findElement(By.className("sk-fading-circle")).isDisplayed()) 
+		    boolean displayed = wait.until(x -> x.findElement(By.className("sk-fading-circle"))).isDisplayed();
+		    
+		    if(displayed) {
+				print(proxy != null ? ("[" + proxy.getPassword() + ":" + proxy.getPort() + "] -> ") : "" + "waiting at splash page!");	
+				
+				while(driver.findElements(By.className("g-recaptcha")).size() == 0) 
 					Thread.sleep(5000L);
-			
-			print(proxy != null ? ("[" + proxy.getPassword() + ":" + proxy.getPort() + "] -> ") : "" + "passed splash page!");
-			
-			driver.manage().getCookies().stream().forEach(c -> {
-				if(c.getValue().contains("hmac")) {
-					hmac = c.getValue();
-					hmacExpiration = c.getExpiry();
-				}
-			});
-			
-			if(driver.findElements(By.className("g-recaptcha")).size() > 0)
-				siteKey = driver.findElement(By.className("g-recaptcha")).getAttribute("data-sitekey");
-			
-			if(driver.findElements(By.id("flashproductform")).size() > 0)
-				clientId = driver.findElement(By.id("flashproductform")).getAttribute("action").split("clientId=")[1];
-			
-			Date timeLeft = new Date(hmacExpiration.getTime() - System.currentTimeMillis());
-			print("[Success] -> SiteKey: " + siteKey + " Client ID: " + clientId + " HMAC: " + hmac + " Time Left: " + timeLeft.getMinutes() + "m" + timeLeft.getSeconds() + "s");
+				
+				print(proxy != null ? ("[" + proxy.getPassword() + ":" + proxy.getPort() + "] -> ") : "" + "passed splash page!");
+				
+				driver.manage().getCookies().stream().forEach(c -> {
+					if(c.getValue().contains("hmac")) {
+						hmac = c.getValue();
+						hmacExpiration = c.getExpiry();
+					}
+				});
+				
+				if(driver.findElements(By.className("g-recaptcha")).size() > 0)
+					siteKey = driver.findElement(By.className("g-recaptcha")).getAttribute("data-sitekey");
+				
+				if(driver.findElements(By.id("flashproductform")).size() > 0)
+					clientId = driver.findElement(By.id("flashproductform")).getAttribute("action").split("clientId=")[1];
+				
+				Date timeLeft = new Date(hmacExpiration.getTime() - System.currentTimeMillis());
+				print("[Success] -> SiteKey: " + siteKey + " Client ID: " + clientId + " HMAC: " + hmac + " Time Left: " + timeLeft.getMinutes() + "m" + timeLeft.getSeconds() + "s");
+				
+		    } else
+		    	print("Error, Element displayed: " + displayed);
 			
 			if(manual) {
 				
