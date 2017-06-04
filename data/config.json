@@ -9,11 +9,11 @@
       12.5
     ],
     "payment": "CC 4",
-    "tasks": 5
+    "tasks": 1
   },
   {
     "link": "http://adidas.com/yeezy",
-    "splash": false,
+    "splash": true,
     "sizes": [
       6.0,
       6.5,

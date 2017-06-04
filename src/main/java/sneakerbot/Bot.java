@@ -51,10 +51,11 @@ public class Bot {
 			} catch (Exception e) { System.out.println(e.getMessage());}
 			
 			for (int start = 0; start < c.getTasks(); start++) 
-				pool.run(new Adidas(getRandomProxy(), creds, c.isSplash(), creds != null ? false : true));
+				pool.run(new Adidas(getRandomProxy(), creds, c.getLink(), c.isSplash(), creds != null ? false : true, c.getSizes()));
 			
 		});
 		
+
 		System.out.println("Proxies loaded: " + (proxies.size() + inUse.size()) + "\nTasks loaded: " + taskCount + "\nPress Enter to start tasks.");
 		try{System.in.read();}
 		catch(Exception e){}
