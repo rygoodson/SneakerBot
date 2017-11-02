@@ -1,19 +1,23 @@
 [
   {
-    "link": "http://adidas.com/yeezy",
-    "splash": true,
+    "sku": "CG5107",
+    "captchaKey": "testKey",
+    "splash": false, // for yeezys
+	"manual": true,
     "sizes": [
       8.0,
-      8.5,
+      9.5,
       11.0,
       12.5
     ],
-    "payment": "CC 4",
+    "payment": "CC 2",
     "tasks": 1
   },
   {
-    "link": "http://adidas.com/yeezy",
+    "sku": "CP9654",
+	"captchaKey": "testKey",
     "splash": true,
+	"manual": false,
     "sizes": [
       6.0,
       6.5,
