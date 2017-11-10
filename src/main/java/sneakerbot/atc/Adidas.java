@@ -1,28 +1,5 @@
 package main.java.sneakerbot.atc;
 
-import java.util.Date;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-import java.util.logging.Level;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import com.machinepublishers.jbrowserdriver.JBrowserDriver;
-import com.machinepublishers.jbrowserdriver.ProxyConfig;
-import com.machinepublishers.jbrowserdriver.ProxyConfig.Type;
-import com.machinepublishers.jbrowserdriver.Settings;
-import com.machinepublishers.jbrowserdriver.Settings.Builder;
-import com.machinepublishers.jbrowserdriver.UserAgent;
-
 import main.java.sneakerbot.loaders.Credentials.CredentialObject;
 import main.java.sneakerbot.loaders.Proxy.ProxyObject;
 
